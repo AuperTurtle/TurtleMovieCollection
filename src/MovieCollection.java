@@ -305,15 +305,135 @@ public class MovieCollection {
     }
   }
 
-  private void listGenres() {
-    /* TASK 5: IMPLEMENT ME */
+  private void sortGenre(ArrayList<String> listToSort) {
+    for (int j = 1; j < listToSort.size(); j++) {
+      String temp = listToSort.get(j);
+
+      int possibleIndex = j;
+      while (possibleIndex > 0 && temp.compareTo(listToSort.get(possibleIndex - 1)) < 0) {
+        listToSort.set(possibleIndex, listToSort.get(possibleIndex - 1));
+        possibleIndex--;
+      }
+      listToSort.set(possibleIndex, temp);
+    }
   }
+
+    private void listGenres() {
+      ArrayList<String> genres = new ArrayList<String>();
+
+      for (int i = 0; i < movies.size(); i++) {
+        String movieGenres = movies.get(i).getGenres();
+        String[] movieGenres2 = movieGenres.split("\\|");
+          for (int z = 0; z < movieGenres2.length; z++) {
+            if (!genres.contains(movieGenres2[z])) {
+              genres.add(movieGenres2[z]);
+            }
+        }
+      }
+      sortGenre(genres);
+      for (int i = 0; i < genres.size(); i++) {
+        int tempNum = i + 1;
+        System.out.println("" + tempNum + ". " + genres.get(i));
+      }
+
+      System.out.println("Which genre would you like to see all movies for?");
+      System.out.print("Enter number: ");
+      int choice = scanner.nextInt();
+      scanner.nextLine();
+      String genre = genres.get(choice - 1);
+
+      ArrayList<Movie> temp = new ArrayList<Movie>();
+      for (int i = 0; i < movies.size(); i++) {
+        if (movies.get(i).getGenres().contains(genre)) {
+          temp.add(movies.get(i));
+        }
+      }
+
+      // sort the results by title
+      sortResults(temp);
+
+      // now, display them all to the user
+      for (int i = 0; i < temp.size(); i++) {
+        String title = temp.get(i).getTitle();
+
+
+        // this will print index 0 as choice 1 in the results list; better for user!
+        int choiceNum = i + 1;
+        System.out.println("" + choiceNum + ". " + title);
+      }
+
+      System.out.println("Which movie would you like to learn more about?");
+      System.out.print("Enter number: ");
+      int choiceTwo = scanner.nextInt();
+      scanner.nextLine();
+      Movie selectedMovie = temp.get(choiceTwo - 1);
+      displayMovieInfo(selectedMovie);
+    }
   
   private void listHighestRated() {
-    /* TASK 6: IMPLEMENT ME */
+    ArrayList<Movie> temp = new ArrayList<Movie>();
+    ArrayList<Movie> temp2 = new ArrayList<Movie>();
+    temp.add(movies.get(0));
+    for (int i = 0; i < movies.size(); i++) {
+
+        int z = 0;
+        while (temp.get(z).getUserRating() > movies.get(i).getUserRating() && z < temp.size() - 1) {
+            z++;
+        }
+          temp.add(z, movies.get(i));
+      }
+
+    for (int i = 0; i < 50; i++) {
+      temp2.add(temp.get(i));
+    }
+
+    // now, display them all to the user
+    for (int i = 0; i < temp2.size(); i++) {
+      String title = temp2.get(i).getTitle() + ": " + temp2.get(i).getUserRating();
+
+      // this will print index 0 as choice 1 in the results list; better for user!
+      int choiceNum = i + 1;
+      System.out.println("" + choiceNum + ". " + title);
+    }
+
+    System.out.println("Which movie would you like to learn more about?");
+    System.out.print("Enter number: ");
+    int choice = scanner.nextInt();
+    scanner.nextLine();
+    Movie selectedMovie = temp.get(choice - 1);
+    displayMovieInfo(selectedMovie);
   }
   
   private void listHighestRevenue() {
-    /* TASK 6: IMPLEMENT ME */
-  }
+    ArrayList<Movie> temp = new ArrayList<Movie>();
+    ArrayList<Movie> temp2 = new ArrayList<Movie>();
+    temp.add(movies.get(0));
+    for (int i = 0; i < movies.size(); i++) {
+
+      int z = 0;
+      while (temp.get(z).getRevenue() > movies.get(i).getRevenue() && z < temp.size() - 1) {
+        z++;
+      }
+      temp.add(z, movies.get(i));
+    }
+
+    for (int i = 0; i < 50; i++) {
+      temp2.add(temp.get(i));
+    }
+
+    // now, display them all to the user
+    for (int i = 0; i < temp2.size(); i++) {
+      String title = temp2.get(i).getTitle() + ": " + temp2.get(i).getRevenue();
+
+      // this will print index 0 as choice 1 in the results list; better for user!
+      int choiceNum = i + 1;
+      System.out.println("" + choiceNum + ". " + title);
+    }
+
+    System.out.println("Which movie would you like to learn more about?");
+    System.out.print("Enter number: ");
+    int choice = scanner.nextInt();
+    scanner.nextLine();
+    Movie selectedMovie = temp.get(choice - 1);
+    displayMovieInfo(selectedMovie);  }
 }
